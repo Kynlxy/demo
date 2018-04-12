@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="//libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="main-warp">
+    <div class="input-div">
+        <span>名字</span>
+        <input type="text" class="name">
+    </div>
+    <div class="input-div">
+        <span>密码</span>
+        <input type="text" class="pwd">
+    </div>
+    <button>验证</button>
+</div>
+
+</body>
+<script>
+    ;( function (){
+        function checkStructure (){
+            this.checkArr = [];
+            var that = this;
+            this.checkMsg = {
+                isHave : function (value,value2,errMsg){
+                    if(value.length == 0){
+                        return that.errFunction(errMsg)
+                    }
+                }
+            }
+        }
+        checkStructure.prototype.errFunction = function (errMsg){
+              return {
+                  errMsg:errMsg
+              }
+        };
+        checkStructure.prototype.check = function (functionName,value,value2,errorMsg){
+            if (this.checkMsg[functionName]){
+                return this.checkMsg[functionName](value,value2,errorMsg);
+            }
+        };
+        checkStructure.prototype.lastCheck = function (){
+
+        };
+        $("button").click( function (){
+            var demo = new checkStructure();
+            demo.check('isHave',$(".name").val(),'','请输入');
+            debugger
+            var errMsgArr  = demo.errFunction();
+            if (errMsgArr)alert(errMsgArr.errMsg)
+        })
+    })();
+</script>
+</html>
