@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片压缩</title>
+    <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<input type="file" name="image" accept="image/*" id="xx11" onchange="showPic(this)">
+<img id="xx" style="width: 200px;height: 200px;display: block" src="" alt="">
+</body>
+<script>
+    function showPic(source, index) {
+        var file = source.files[0];
+        if (window.FileReader) {
+            var fr = new FileReader();
+            fr.readAsDataURL(file);
+            fr.onloadend = function (e) {
+                // 压缩图片
+                cutImageBase64(e.target.result, 300, 0.5, index);
+            };
+        }
+    }
+
+
+    function cutImageBase64(imgSrc, wid, quality, index) { //压缩上上传图片
+        var img = new Image();
+        img.src = imgSrc;
+        img.onload = function () {
+            var that = this;
+
+            //生成比例
+            var w = that.width,
+                    h = that.height,
+                    scale = w / h;
+            w = wid || w;
+            h = w / scale;
+
+            //生成canvas
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            $(canvas).attr({width: w, height: h});
+            ctx.drawImage(that, 0, 0, w, h);
+
+            // 生成base64
+            base64 = canvas.toDataURL('image/jpeg', quality || 0.6);
+            $('#xx').attr('src', base64); // 显示压缩后的图片
+        };
+    }
+
+</script>
+</html>
